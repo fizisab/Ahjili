@@ -11,14 +11,14 @@
 // MySQL Hostname
 $sql_db_host = "localhost";
 // MySQL Database User
-$sql_db_user = "root";
+$sql_db_user = "asdhj_ahjili2";
 // MySQL Database Password
-$sql_db_pass = "";
+$sql_db_pass = "A!rzTvWr843c";
 // MySQL Database Name
-$sql_db_name = "aljila";
+$sql_db_name = "asdhj_ahjili2";
 
 // Site URL
-$site_url = "http://localhost/aljila"; // e.g (http://example.com) 
+$site_url = "https://www.ahjili.com/demo"; // e.g (http://example.com) 
 
 // Purchase code
 $purchase_code = "45f170c5-258a-436b-a8f1-7387e7602d1f"; // Your purchase code, don't give it to anyone. 
