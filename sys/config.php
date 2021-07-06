@@ -15,7 +15,7 @@ $sql_db_user = "asdhj_ahjili2";
 // MySQL Database Password
 $sql_db_pass = "A!rzTvWr843c";
 // MySQL Database Name
-$sql_db_name = "asdhj_ahjili2";
+$sql_db_name = "asdhj_ahjili2";  
 
 // Site URL
 $site_url = "https://www.ahjili.com/demo"; // e.g (http://example.com) 
