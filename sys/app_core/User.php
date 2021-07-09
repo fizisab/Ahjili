@@ -264,7 +264,7 @@ class User extends Generic{
 		}
 		if(isset($_POST['phone_number'])) {
 			$insert_data = array(
-            'username' => self::secure($_POST['username']),
+          //  'username' => self::secure($_POST['username']),
             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
           //  'email' => self::secure($_POST['email']),
             'phone_number' => self::secure($_POST['phone_number']),
@@ -276,7 +276,7 @@ class User extends Generic{
 		);
 		} else {
 			$insert_data = array(
-            'username' => self::secure($_POST['username']),
+         //   'username' => self::secure($_POST['username']),
             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
             'email' => self::secure($_POST['email']),
            // 'phone_number' => self::secure($_POST['phone_number']),
@@ -340,7 +340,7 @@ class User extends Generic{
 					'from_email' => self::$config['site_email'],
 					'from_name' => self::$config['site_name'],
 					'to_email' => self::secure($_POST['email']),
-					'to_name' => self::secure($_POST['username']),
+				//	'to_name' => self::secure($_POST['username']),
 					'subject' => 'Confirm your account',
 					'charSet' => 'UTF-8',
 					'message_body' => $message_body,

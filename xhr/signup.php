@@ -7,7 +7,7 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 		$isemail = $_POST['isemail'];	
 	}
 	$post   = array();
-	$post[] = (empty($_POST['username']) || empty($_POST['email']));
+	$post[] = (empty($_POST['email']));
 	$post[] = (empty($_POST['password']) || empty($_POST['conf_password']));
 
 	if (in_array(true, $post)) {
@@ -16,21 +16,21 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 
 	else{
 
-		if (User::userNameExists($_POST['username'])) {
+		/*if (User::userNameExists($_POST['username'])) {
 			$error = lang('username_is_taken');
 		}
 
 		else if(strlen($_POST['username']) < 4 || strlen($_POST['username']) > 16){
 			$error = lang('username_characters_length');
-		}
+		}*/
 
-		else if(!preg_match('/^[\w]*[a-zA-Z]{1}[\w]*$/', $_POST['username'])){
+		/*else if(!preg_match('/^[\w]*[a-zA-Z]{1}[\w]*$/', $_POST['username'])){
 			
 				$error = lang('username_invalid_characters');
 			
 		}
-
-		else if(User::userEmailExists($_POST['email'])){
+*/
+		if(User::userEmailExists($_POST['email'])){
 			$error = lang('email_exists');
 		}
 
