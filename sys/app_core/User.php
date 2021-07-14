@@ -1442,7 +1442,7 @@ class User extends Generic{
 		
 
 			$sid = 'ACa23c94c7f76197ffbdf4d53eeb90d2c2';
-			$token = '7ec1b52c3223008361bb96476a5490a4';
+			$token = '0e0b5a6dda4c24ef7d3e63ee5a829e4a';
 			$client = new Client($sid, $token);
 			$client->messages->create(
 			    $phone,
