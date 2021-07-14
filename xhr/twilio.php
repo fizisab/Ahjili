@@ -9,7 +9,7 @@ if ($action == 'create_new_video_call' && IS_LOGGED &&
     !empty($config['video_apiKeySecret']) 
     ) {
 
-        if ( empty($_GET['user_id2']) || empty($_GET['user_id1']) || $_GET['user_id1'] != $me['user_id'] ) {
+        if (empty($_GET['user_id2']) || empty($_GET['user_id1']) || $_GET['user_id1'] != $me['user_id'] ) {
             $data = array(
                 'status' => 403,
                 'message' => 'Forbidden'

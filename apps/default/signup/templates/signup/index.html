@@ -97,9 +97,13 @@ if(intRegex.test(ep_emailval)) {
         console.log("is email");
       $('#isemail').val(1);
     }
+
+    
+		//	console.log(email);
 });
 
 		jQuery(document).ready(function($) {
+
 			$("form#signup").ajaxForm({
 				url:'<?php echo($context['xhr_url']) ?>/signup',
 				dataType:'json',
@@ -110,16 +114,24 @@ if(intRegex.test(ep_emailval)) {
 				},
 				success:function(data){
 					scroll2top();
-
+					var email =  $('#isemail').val();
 					if (data.status == 200) {
 
 						$(".signup-alert").html($('<div>',{
 							class: 'alert alert-success',
 							text: data.message
 						}));
+						
 						<?php if ($config['email_validation'] != 'on') { ?>
 						setTimeout(function(){
 							window.location.href = "{{CONFIG site_url}}";
+						},1500);
+						<?php } ?>
+					
+					} else if(data.status == 225){
+						<?php if ($config['email_validation'] != 'on') { ?>
+						setTimeout(function(){
+							window.location.href = "{{CONFIG site_url}}/phoneotp";
 						},1500);
 						<?php } ?>
 					}

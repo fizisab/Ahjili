@@ -1,5 +1,8 @@
 <?php 
+ require __DIR__ . '/../../vendor/autoload.php';
 
+// Use the REST API Client to make requests to the Twilio REST API
+ use Twilio\Rest\Client;
 /**
 * User class, everything related to users.
 */
@@ -254,6 +257,7 @@ class User extends Generic{
 
 	// register a new user
 	public static function registerUser(){
+		$otp = random_int(100000, 999999);
 		$gender = 'male';
 		$active = (self::$config['email_validation'] == 'on') ? 0 : 1;
 		$email_validation = (self::$config['email_validation'] == 'on') ? 0 : 1;
@@ -271,25 +275,28 @@ class User extends Generic{
             'ip_address' => '0.0.0.0',
             'gender' => $gender,
             'active' => $active,
+          //  'phone_otp' => $otp,
             'last_seen' => time(),
             'registered' => date('Y') . '/' . intval(date('m'))
 		);
 		} else {
 			$insert_data = array(
-         //   'username' => self::secure($_POST['username']),
+         //  'username' => self::secure($_POST['username']),
             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
             'email' => self::secure($_POST['email']),
-           // 'phone_number' => self::secure($_POST['phone_number']),
+         // 'phone_number' => self::secure($_POST['phone_number']),
             'ip_address' => '0.0.0.0',
             'gender' => $gender,
             'active' => $active,
             'last_seen' => time(),
             'registered' => date('Y') . '/' . intval(date('m'))
-		);
+		); 
 		}
+
 		
+
 		$user_object = new User();
-		if (!empty($_SESSION['ref']) && self::$config['affiliate_type'] == 0 && self::$config['affiliate_system'] == 1) {
+		if (!empty($_SESSION['ref']) && self::$config['affiliate_type'] == 0 && self::$config['affiliate_system'] == 1) { 
 			
 			$user_object->setUserByName($_SESSION['ref']);
 			
@@ -314,6 +321,8 @@ class User extends Generic{
 			$email_code = sha1(time() + rand(111,999));
 			$insert_data['email_code'] = $email_code;
 		}
+
+		
 
         $user_id     = self::$db->insert(T_USERS, $insert_data);
         //$user_id     = 4;
@@ -369,7 +378,8 @@ class User extends Generic{
 		   	}
         }
 
-        return $signup;
+     //   return $signup;
+        return 'Hello Hello';
 	}
 
 	// register a new user
@@ -1426,6 +1436,21 @@ class User extends Generic{
 			}
 		}
 		return $data;
+	}
+
+	function sendotp($phone,$otp){
+		
+
+			$sid = 'ACa23c94c7f76197ffbdf4d53eeb90d2c2';
+			$token = '7ec1b52c3223008361bb96476a5490a4';
+			$client = new Client($sid, $token);
+			$client->messages->create(
+			    $phone,
+			    [
+			         'from' => '+14158952595',
+			        'body' => 'Your Ahjili Verificaton Code: '. $otp
+			    ]
+			);
 	}
 
 

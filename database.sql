@@ -415,7 +415,8 @@ INSERT INTO `pxp_config` (`id`, `name`, `value`) VALUES
 (184, 'amazone_s3_key_2', ''),
 (185, 'amazone_s3_s_key_2', ''),
 (186, 'region_2', ''),
-(187, 'upload_reels', 'on');
+(187, 'upload_reels', 'on'),
+(188, 'phone_validation', 'on');
 
 -- --------------------------------------------------------
 

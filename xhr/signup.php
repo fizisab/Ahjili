@@ -1,5 +1,7 @@
 <?php 
 
+
+
 if ($action == 'signup' && $config['signup_system'] == 'on') {
 	$error  = false;
 	$isemail = 1;
@@ -14,7 +16,7 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 		$error = lang('please_fill_fields');
 	}
 
-	else{
+	else {
 
 		/*if (User::userNameExists($_POST['username'])) {
 			$error = lang('username_is_taken');
@@ -37,6 +39,13 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 		else if(User::userPhoneExists($_POST['email'])){
 			$error = lang('phonenumber_exists');
 		}
+		else if($_POST['password'] != $_POST['conf_password']){
+			$error = lang('password_not_match');
+		}
+
+		elseif (strlen($_POST['conf_password']) < 4) {
+			$error = lang('password_is_short');
+		}
 		else if($isemail){
 			if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 			
@@ -51,13 +60,7 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 			
 	}
 
-		else if($_POST['password'] != $_POST['conf_password']){
-			$error = lang('password_not_match');
-		}
-
-		elseif (strlen($_POST['conf_password']) < 4) {
-			$error = lang('password_is_short');
-		}
+		
 		$blacklist = $user->isInBlackList($_POST['username'],$_POST['email']);
 		if ($blacklist['count'] > 0) {
 			if ($blacklist['type'] == 'username') {
@@ -85,13 +88,29 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 		$error = lang('email_provider_banned');
 	}
 	if (empty($error)) {
-		
-		$register = User::registerUser();
-		$data['status']  = 200;
-		if ($config['email_validation'] == 'on') {
-			$data['message'] = lang('successfully_joined_created');
+
+		if(empty($isemail)){
+			session_start();
+			$_SESSION["phone_number"] = $_POST['phone_number'];
+			$_SESSION["password"] = $_POST['password'];
+			$_SESSION["gender"] = $_POST['gender'];
+			$phone = $_POST['phone_number'];
+			$otp = random_int(100000, 999999);
+			$_SESSION["otp"] = $otp;
+
+			$send = User::sendotp($phone,$otp);
+			$data['status']  = 225;	
+			
+
 		} else {
-			$data['message'] = lang('successfully_joined_desc');
+				$register = User::registerUser();
+				$data['status']  = 200;
+				if ($config['email_validation'] == 'on') {
+				$data['message'] = lang('successfully_joined_created');
+				} else {
+				$data['message'] = lang('successfully_joined_desc');
+				}
+
 		}
 	}
 	else{
