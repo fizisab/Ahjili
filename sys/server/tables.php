@@ -40,3 +40,4 @@ define('T_BLOG', 'pxp_blog');
 define('T_STORE', 'pxp_store');
 define('T_BANNED_IPS', 'pxp_banned_ip');
 define('T_LIVE_SUB', 'live_sub_users');
+define('T_TWILIO_SMS', 'sms_sent_twilio');

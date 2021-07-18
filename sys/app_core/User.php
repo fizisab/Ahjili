@@ -91,6 +91,20 @@ class User extends Generic{
 		return (empty($user_id)) ? false : true;
 	}
 
+	public static function checkSMSlimit($phone) {
+
+		$id = self::$db->where("(phone_number = $phone and auto_time >= now() - INTERVAL 1 DAY )")->getValue(T_TWILIO_SMS, 'count(id)');
+
+		return $id;
+	}
+
+	public static function checkOneMinDelay($phone) {
+
+		$id = self::$db->where("(phone_number = $phone and auto_time >= now() - INTERVAL  1 minute )")->getValue(T_TWILIO_SMS, 'count(id)');
+
+		return $id;
+	}
+
     // return the user data (object)
 	public function getUser() {
 		return $this->fetchUser();
@@ -257,7 +271,7 @@ class User extends Generic{
 
 	// register a new user
 	public static function registerUser(){
-		$otp = random_int(100000, 999999);
+	//	$otp = random_int(100000, 999999);
 		$gender = 'male';
 		$active = (self::$config['email_validation'] == 'on') ? 0 : 1;
 		$email_validation = (self::$config['email_validation'] == 'on') ? 0 : 1;
@@ -1451,8 +1465,22 @@ class User extends Generic{
 			        'body' => 'Your Ahjili Verificaton Code: '. $otp
 			    ]
 			);
+			return 1;
 	}
 
+	function insertSmsTime($phone) {
+
+	//	$user_id     = self::$db->insert(T_TWILIO_SMS, $insert_data);
+
+		$insert_data = array(
+            'phone_number' => self::secure($phone),
+            'ip_address' => '0.0.0.0',
+            'time' => time()
+		);
+
+		$sms     = self::$db->insert(T_TWILIO_SMS, $insert_data);
+
+	}
 
 }
 

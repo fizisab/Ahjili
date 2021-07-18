@@ -52,10 +52,14 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 			$error = lang('email_invalid_characters');
 			} 
 		}
-		else if(!$isemail){
+		else if(!$isemail) {
 			$_POST['phone_number'] = $_POST['email'];
 			if(!filter_var($_POST['email'], FILTER_SANITIZE_NUMBER_INT) || strlen($_POST['email']) < 8 || strlen($_POST['email']) > 20) {
 			$error = lang('phone_invalid_characters');
+		}
+
+		 if(User::checkSMSlimit($_POST['phone_number']) >2){
+			$error = lang('daily_limit_reached');
 		}
 			
 	}
@@ -99,7 +103,12 @@ if ($action == 'signup' && $config['signup_system'] == 'on') {
 			$_SESSION["otp"] = $otp;
 
 			$send = User::sendotp($phone,$otp);
-			$data['status']  = 225;	
+			if($send){
+			$insertsms  = User::insertSmsTime($phone);
+			$data['status']  = 225;
+			$_SESSION['totalsms']  = User::checkSMSlimit($phone);
+			}
+				
 			
 
 		} else {

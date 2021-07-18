@@ -7,7 +7,7 @@ if (IS_LOGGED !== true) {
 
 else if ($action == 'send') {
 	$vl1 = ((!empty($_POST['text']) || !empty($_FILES['send_file'])) && !empty($_SESSION['to_id']));
-	$vl2 = (is_numeric($_SESSION['to_id']) === true);
+	$vl2 = (is_numeric($_SESSION['to_id']) === true); 
 
 
 	if ($vl1 && $vl2) {

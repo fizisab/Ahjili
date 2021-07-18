@@ -11,7 +11,7 @@
 						<h3 class="animated fadeInUpBig">{{LANG let_set_up}}</h3>
 						<h4 class="animated fadeInUpBig">{{LANG create_acc_proceed}} {{CONFIG site_name}}</h4>
 						<p class="animated fadeInUpBig">{{LANG min_to_get_start}}</p>
-						<span class="fluid copyright">Copyright &copy; 2020 {{CONFIG site_name}}</span>
+						<span class="fluid copyright">Copyright &copy; 2020 {{CONFIG site_name}} </span>
 					</div>
 				</div>
 			</div>
@@ -35,9 +35,9 @@
 					<div class="pp_mat_input"> 
 						<input type="hidden" name="phone_number" value="<?php echo $_SESSION['phone_number'];?> ">
 						<input type="hidden" name="password" value="<?php echo $_SESSION['password'];?> ">
-						<input type="hidden" name="otp" value="<?php echo $_SESSION['otp'];?> ">
+						
 						<input type="hidden" name="gender" value="<?php echo $_SESSION['gender'];?> ">
-						<input required="true" class="form-control" type="text" onchange="activateButton()" name="phoneotp" id="phoneotp" pattern="\d*" maxlength="6" placeholder="{{LANG phoneotp}}" />
+						<input required="true" autocomplete="off" class="form-control" type="text" onchange="activateButton()" name="phoneotp" id="phoneotp" pattern="\d*" maxlength="6" placeholder="{{LANG phoneotp}}" />
 						<label for="email">{{LANG phoneotp}} <?php echo $_SESSION["phone_number"]; ?> </label>
 						<span class="bar"></span>
 					</div>
@@ -47,8 +47,24 @@
 					
 					<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
 				
-					<div class="pp_load_loader"><button class="btn btn-info pp_flat_btn" type="submit" id="sign_submit" disabled><span>{{LANG confirm}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></button></div>
+					<div class="pp_load_loader"><button class="btn btn-info pp_flat_btn" type="submit" id="sign_submit" disabled><span>{{LANG confirm}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></button> 
+
+						
+						
+  	
+   </div>
 				</form>
+ 				<?php if($_SESSION['totalsms'] < 3) {  ?>
+ 				<form action="" class="form2" id="resend">
+ 					<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+ 					<button class="btn btn-info pp_flat_btn" type="submit" id="resendcode" disabled>  <span id="timer">
+    <span id="time">10 </span>S      
+  </span></button>
+ 				</form>
+				
+  <?php } ?>
+  			
+
 			</div>
 			<div class="col-sm-2 col-md-3"></div>
 			</div>
@@ -81,7 +97,52 @@
 							window.location.href = "{{CONFIG site_url}}";
 						},1500);
 						<?php } ?>
-					
+
+						console.log(data);
+					} 
+					else{
+						$(".signup-alert").html($('<div>',{
+							class: 'alert alert-danger',
+							text: data.message
+						}));
+					}
+					$('form').find('.pp_load_loader').removeClass('loadingg');
+	                $('form').find('button[type="submit"]').removeAttr('disabled');
+				},
+				error: function(data){
+					console.log(data);
+				}
+			})
+		});
+
+
+		jQuery(document).ready(function($) {
+
+			$("form#resend").ajaxForm({
+				url:'<?php echo($context['xhr_url']) ?>/resendcode',
+				dataType:'json',
+				type:'POST',
+				beforeSend:function(){
+					$('.form2').find('.pp_load_loader').addClass('loadingg');
+					$('.form2').find('button[type="submit"]').attr('disabled','true');
+				},
+				success:function(data){
+					scroll2top();
+					var email =  $('#isemail').val();
+					if (data.status == 200) {
+
+						$(".signup-alert").html($('<div>',{
+							class: 'alert alert-success',
+							text: data.message
+						}));
+						
+						<?php if ($config['email_validation'] != 'on') { ?>
+						setTimeout(function(){
+							window.location.href = "{{CONFIG site_url}}";
+						},1500);
+						<?php } ?>
+
+						console.log(data);
 					} 
 					else{
 						$(".signup-alert").html($('<div>',{
@@ -134,4 +195,21 @@
 				document.getElementById("sign_submit").disabled = true;
 			}
 		};
+
+		var counter = 10;
+var interval = setInterval(function() {
+    counter--;
+    // Display 'counter' wherever you want to display it.
+    if (counter <= 0) {
+     		clearInterval(interval);
+      	$('#timer').html("<p>Resend Code</p>");  
+      	document.getElementById("resendcode").disabled = false;
+        return;
+    }else{
+    	$('#time').text(counter);
+      console.log("Timer --> " + counter);
+      document.getElementById("resendcode").disabled = true;
+    }
+}, 1000);
+
 	</script>
